@@ -20,11 +20,15 @@
     https://www.arduino.cc/reference/en/#variables
     https://www.arduino.cc/reference/en/language/variables/data-types/stringobject/
 */
-
+int counter = 0;
 void setup() {
-
+  Serial.begin(115200);
+  Serial.println("Starting counter demo");
+  counter = 100;
 }
 
 void loop() {
-
+  counter = counter + 1;         // loop() can use it too
+  Serial.println(counter);
+  delay(500);
 }
