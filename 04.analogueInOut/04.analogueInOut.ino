@@ -42,9 +42,25 @@ const int LED_PIN = 6;     // Grove LED on D6 (PWM)
 const int BUZZER_PIN = 5;  // Grove Buzzer on D5 (PWM)
 
 void setup() {
-
+  Serial.begin(115200);
+  pinMode(LED_PIN, OUTPUT);
 }
 
 void loop() {
+  int potValue = analogRead(POT_PIN);
+  int ledValue = map(potValue, 0, 1023, 0, 255);
 
+  analogWrite(LED_PIN, ledValue);
+
+  Serial.print(potValue);
+  Serial.print(",");
+  Serial.println(ledValue);
+
+  delay(1000);
 }
+/*
+  Sensor          Min seen   Max seen   How I tested
+  Potentiometer   0        1023       Fully turned the potentiometer both ways
+  Light sensor    20       215        Regular room light, covering sensor with finger
+  Sound sensor    2        739        Regular talking in room, chatter in background
+*/
