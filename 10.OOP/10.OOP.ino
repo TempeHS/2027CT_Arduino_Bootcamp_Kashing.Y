@@ -19,11 +19,53 @@
     https://www.youtube.com/watch?v=S_uaROFnWSg
     https://youtu.be/cUVryWbVkXk
 */
+class Led {
+  private:
+    int pin;          // properties: data each Led remembers
+    bool isOn;
+
+  public:
+    Led(int ledPin) {  // constructor: runs when an object is created
+      pin = ledPin;
+      isOn = false;
+    }
+
+    void begin() {
+      pinMode(pin, OUTPUT);
+      digitalWrite(pin, LOW);
+    }
+
+    void turnOn() {    // methods: things every Led can do
+      digitalWrite(pin, HIGH);
+      isOn = true;
+    }
+
+    void turnOff() {
+      digitalWrite(pin, LOW);
+      isOn = false;
+    }
+
+    void toggle() {
+      if (isOn) {
+        turnOff();
+      } else {
+        turnOn();
+      }
+    }
+};
+
+Led moduleLed(6);    // the Grove LED module on D6
+Led builtinLed(13);  // the LED soldered onto the Uno itself
 
 void setup() {
-
+  moduleLed.begin();
+  moduleLed.pin = 2;
+  builtinLed.begin();
+  builtinLed.turnOn();   // start opposite to the module LED
 }
 
 void loop() {
-
+  moduleLed.toggle();
+  builtinLed.toggle();
+  delay(500);
 }
