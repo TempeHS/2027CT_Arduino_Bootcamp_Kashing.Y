@@ -5,10 +5,10 @@
 platform arduino:avr 1.8.8
 
 # Libraries
-library DHT20 0.3.3
 library Grove-3-Axis-Digital-Accelerometer-2g-to-16g-LIS3DHTR 1.2.4
-library Arduino_Sensorkit 1.4.0
 library Servo 1.3.0
+library Arduino_Sensorkit 1.4.0
+library DHT20 0.3.3
 
 # Devices (learned from successful uploads)
 device 0x10c4:0xea60 arduino:avr:uno

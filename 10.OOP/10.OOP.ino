@@ -59,7 +59,6 @@ Led builtinLed(13);  // the LED soldered onto the Uno itself
 
 void setup() {
   moduleLed.begin();
-  moduleLed.pin = 2;
   builtinLed.begin();
   builtinLed.turnOn();   // start opposite to the module LED
 }
