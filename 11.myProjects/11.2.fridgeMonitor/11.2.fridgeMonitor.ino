@@ -1,5 +1,5 @@
 /*
-  Author: 
+  Author:
   Learning Intention: Students will build a monitoring system that watches
   conditions and raises alerts, like the guardian inside a smart fridge
 
@@ -29,10 +29,5 @@
   Suggested Grove ports: Light A3, Buzzer D5, LED D6
 */
 
-void setup() {
-
-}
-
-void loop() {
-
-}
+void setup() { Serial.begin(115200); }
+void loop() { Serial.println(analogRead(A3)); delay(50); }
