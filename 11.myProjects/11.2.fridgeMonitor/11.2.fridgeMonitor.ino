@@ -2,51 +2,51 @@
 const int LIGHT_PIN = A3;
 const int LED_PIN = 6;
 const int BUZZER_PIN = 5;
-const int DOOR_OPEN_THRESHOLD = 450;
 
-const unsigned long DOOR_TIMEOUT   = 10000; // The door must be open for at least 10 seconds before the buzzer starts
-const unsigned long FLASH_INTERVAL = 250; // The lights will flash every 2.5 seconds while hte door is open
-const unsigned long PLOT_INTERVAL  = 50; //How frequently the code checks if the door is open or closed in milliseconds
+const int DOOR_OPEN_THRESHOLD = 2; //If light sensor detects this level of light or higher, the door state will be considered open
+const unsigned long DOOR_TIMEOUT = 10000; //If the door is open for 10 seconds
+const unsigned long FLASH_INTERVAL = 250; //Intervals between the LED flashing in milliseconds
+const unsigned long PLOT_INTERVAL = 50;  //How often the data is plotted/checked
 
-unsigned long doorOpenStartTime = 0; //Unsigned long means the long value cannot be negative, so the positive long value is doubled
-bool doorWasOpenLastCheck       = false; //Sets door was open last check to false at the start of the program, but not const so it can be changed when something happens
-bool alarmActive                = false; //Turns alarm off at teh start of the program
+unsigned long doorOpenStartTime = 0;
+bool doorWasOpenLastCheck = false; //Setting up the light and alarm to not start immediately
+bool alarmActive = false;
 
 unsigned long lastFlashTime = 0;
-unsigned long lastPlotTime  = 0;
-bool ledState               = LOW;
+unsigned long lastPlotTime = 0;
+bool ledState = LOW; //Making sure the light does not start before the door is considered open
 
 void setup() {
   Serial.begin(115200);
-
-  pinMode(BUZZER_PIN, OUTPUT);
+  pinMode(BUZZER_PIN, OUTPUT); //Supply electricity to the buzzer and LED pins
   pinMode(LED_PIN, OUTPUT);
-
-  digitalWrite(BUZZER_PIN, LOW);
+  digitalWrite(BUZZER_PIN, LOW); //Turn them off at the start of the program
   digitalWrite(LED_PIN, LOW);
 }
 
 void loop() {
   unsigned long currentMillis = millis();
-  int lightLevel = analogRead(LIGHT_PIN);
-  bool isDoorOpen = (lightLevel > DOOR_OPEN_THRESHOLD); //For the code to decide if the door is open, the light sensor has to detect a light level of above the door open threshold
+  int lightLevel = analogRead(LIGHT_PIN); //Convert voltage into a digital number, int lightLevel stores that data
+  bool isDoorOpen = (lightLevel > DOOR_OPEN_THRESHOLD); //The door being open is decided by if the door open threshold is lower than the light level
 
   if (isDoorOpen) {
     if (!doorWasOpenLastCheck) {
       doorOpenStartTime = currentMillis;
       doorWasOpenLastCheck = true;
     }
+
     if (currentMillis - doorOpenStartTime >= DOOR_TIMEOUT) {
       alarmActive = true;
     }
   } else {
     doorWasOpenLastCheck = false;
-    alarmActive = false;
-    digitalWrite(BUZZER_PIN, LOW);
+    alarmActive = false; //If the door is open but hasn't been open for ten seconds, the alarm will not activate
+    digitalWrite(BUZZER_PIN, LOW); //Making the buzzer and led turn off
     digitalWrite(LED_PIN, LOW);
   }
+
   if (alarmActive) {
-    digitalWrite(BUZZER_PIN, HIGH);
+    digitalWrite(BUZZER_PIN, HIGH); //Turning the buzzer on if the door is open for 10 seconds or more
 
     if (currentMillis - lastFlashTime >= FLASH_INTERVAL) {
       lastFlashTime = currentMillis;
@@ -67,7 +67,6 @@ void loop() {
     Serial.println(isDoorOpen ? 500 : 0);
   }
 }
-
 
 
 
